@@ -12,6 +12,7 @@ import (
 
 	"demo"
 
+	"github.com/IBM/sarama"
 	"github.com/go-logr/stdr"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
@@ -85,6 +86,16 @@ func newHTTPHandler() http.Handler {
 
 	// Register handlers.
 	handleFunc("/hello", demo.GetRandomData)
+
+	// Register handler for kafka.
+	broker := os.Getenv("KAFKA_BROKER")
+	if broker == "" {
+		broker = "localhost:29092"
+	}
+
+	// Create a new Kafka producer.
+	kafkaProducer := demo.NewProducer([]string{broker}, sarama.V2_8_2_0)
+	handleFunc("/kafka", demo.NewUser(kafkaProducer))
 
 	// Add HTTP instrumentation for the whole server.
 	handler := otelhttp.NewHandler(mux, "/")
