@@ -1,0 +1,21 @@
+server:
+  shutdown: graceful
+
+spring:
+  application:
+    name: demo
+  threads:
+    virtual:
+      enabled: true
+  mvc:
+    problemdetails:
+      enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,metrics,prometheus"
+logging:
+  level:
+    com.example.demo: debug
