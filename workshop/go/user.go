@@ -37,10 +37,15 @@ func NewUser(producer sarama.SyncProducer) http.HandlerFunc {
 		defer span2.End()
 
 		id := 1 + rand.Intn(100)
-		producer.SendMessage(&sarama.ProducerMessage{
+		partition, offset, err := producer.SendMessage(&sarama.ProducerMessage{
 			Topic: "newuser",
 			Value: sarama.StringEncoder(fmt.Sprintf("New User with id=%d", id)),
 		})
+		if err != nil {
+			log.Panicf("Error from consumer: %v", err)
+		} else {
+			log.Printf("Your data is stored with unique identifier quickstart/%d/%d\n", partition, offset)
+		}
 
 		resp := "New user created"
 		if _, err = io.WriteString(w, resp); err != nil {

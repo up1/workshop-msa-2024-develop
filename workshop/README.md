@@ -52,3 +52,16 @@ workshop-go-1          workshop-go               "/app/api"               go    
 
 $docker compose logs --follow
 ```
+
+## 4. Working with Apache Kafka UI (development mode only)
+* [Kafka UI](https://docs.kafka-ui.provectus.io/)
+
+```
+$docker compose up -d kafka-ui
+$docker compose ps
+```
+
+Access to Kafka Admin
+* http://localhost:8080
+  * user=admin
+  * password=admin

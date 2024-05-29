@@ -20,8 +20,7 @@ type OTelInterceptor struct {
 func NewOTelInterceptor(brokers []string) *OTelInterceptor {
 	oi := OTelInterceptor{}
 	// oi.tracer = sdktrace.NewTracerProvider().Tracer("interceptors")
-	_, span := tracer.Start(context.TODO(), "GetRandomData")
-	oi.tracer = span.TracerProvider().Tracer("interceptors")
+	oi.tracer = tracer
 
 	// These are based on the spec, which was reachable as of 2020-05-15
 	// https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/messaging.md
@@ -64,6 +63,7 @@ func (oi *OTelInterceptor) OnSend(msg *sarama.ProducerMessage) {
 	if shouldIgnoreMsg(msg) {
 		return
 	}
+
 	_, span := oi.tracer.Start(context.TODO(), msg.Topic)
 	defer span.End()
 	spanContext := span.SpanContext()
