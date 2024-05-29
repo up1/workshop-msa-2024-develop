@@ -62,9 +62,35 @@ $docker compose logs --follow
 ```
 $docker compose up -d kafka-ui
 $docker compose ps
+$docker compose logs --follow
 ```
 
 Access to Kafka Admin
 * http://localhost:8080
   * user=admin
   * password=admin
+
+
+## 5. Working with Java and Spring Boot
+* [OpenTelemetry with Spring Boot](https://opentelemetry.io/docs/zero-code/java/spring-boot/)
+
+Build jar file
+```
+$cd java
+$mvnw clean package
+$cd ..
+```
+
+Build docker image
+```
+$docker compose build java
+```
+
+Run container
+```
+$docker compose up -d java
+$docker compose ps
+$docker compose logs --follow
+```
+
+Call API = http://localhost:8081/api/somkiat

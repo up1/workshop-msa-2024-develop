@@ -9,6 +9,29 @@ services:
       OTEL_METRIC_EXPORT_INTERVAL: "5000"  # so we don't have to wait 60s for metrics
       KAFKA_BROKER: kafka:29092
     depends_on:
+      collector:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+  
+  java:
+    build: ./java
+    ports:
+      - "8081:8080"
+    environment:
+      OTEL_RESOURCE_ATTRIBUTES: service.name=java-service,service.instance.id=localhost:8080
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://collector:4318
+      OTEL_METRIC_EXPORT_INTERVAL: "5000"  # so we don't have to wait 60s for metrics
+      OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION: base2_exponential_bucket_histogram
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider localhost:8080/actuator/health || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    depends_on:
+      collector:
+        condition: service_healthy
       kafka:
         condition: service_healthy
 
