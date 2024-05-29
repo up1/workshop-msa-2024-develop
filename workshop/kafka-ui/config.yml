@@ -11,6 +11,6 @@ kafka:
   clusters:
     - bootstrapServers: kafka:9092
       name: kafka
-      metrics:
-        type: PROMETHEUS
-        port: 9404
+      # metrics:
+      #   type: PROMETHEUS
+      #   port: 9404

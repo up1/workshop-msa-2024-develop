@@ -40,6 +40,9 @@ Access to grafana
 * Producer = Go
 * Consumer = Java + Spring Boot 3
 * Use [Custom Kafka Docker image from Binami](https://hub.docker.com/r/bitnami/kafka)
+* [OpenTelemetry auto-instrumentation and instrumentation libraries for Java](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
+  * version = 2.4.0
+  * [Broker metric](https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/instrumentation/jmx-metrics/javaagent/kafka-broker.md)
 
 Start Kafka
 ```

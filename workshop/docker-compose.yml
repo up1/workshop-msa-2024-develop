@@ -18,21 +18,31 @@ services:
       - "4317:4317"
       - "4318:4318"
       - "3000:3000"
+    healthcheck:
+      test: curl --silent --fail localhost:3000 || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
   
   kafka:
     container_name: kafka
-    image: bitnami/kafka:3.6
+    image: bitnami/kafka:3.7
+    volumes:
+      - ./otel/opentelemetry-javaagent.jar:/usr/share/java/opentelemetry-javaagent.jar
     environment:
       # KRaft settings
-      - KAFKA_CFG_NODE_ID=0
-      - KAFKA_CFG_PROCESS_ROLES=controller,broker
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      KAFKA_CFG_NODE_ID: 0
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
       # Listeners
-      - KAFKA_CFG_LISTENERS=CONTROLLER://:9093,INTERNAL://:9092,EXTERNAL://:29092
-      - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://kafka:9092,EXTERNAL://kafka:29092
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
+      KAFKA_CFG_LISTENERS: CONTROLLER://:9093,INTERNAL://:9092,EXTERNAL://:29092
+      KAFKA_CFG_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://kafka:29092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
+      # JavaAgent of opentelemetry
+      EXTRA_ARGS: "-Xms128m -Xmx256m -javaagent:/usr/share/java/opentelemetry-javaagent.jar -Dotel.jmx.target.system=kafka-broker -Dotel.resource.attributes=service.name=kafka-broker,service.instance.id=kafka:29092 -Dotel.exporter.otlp.endpoint=http://collector:4318"
     ports:
       - "29092:29092"
     healthcheck:
@@ -40,6 +50,9 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    depends_on:
+      collector:
+        condition: service_healthy
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -52,9 +65,9 @@ services:
     healthcheck:
       test: wget --no-verbose --tries=1 --spider localhost:8080 || exit 1
       interval: 5s
-      timeout: 10s
+      timeout: 5s
       retries: 5
-      start_period: 30s
+      start_period: 5s
     depends_on:
       kafka:
         condition: service_healthy
