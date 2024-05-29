@@ -30,8 +30,7 @@ workshop-lgtm-1   grafana/otel-lgtm:0.6.0   "/bin/sh -c ./run-al…"   lgtm     
 ```
 
 Access to grafana
-* http://localhost:3000
+* http://localhost:3000/explore
   * user=admin
   * password=admin
-  
-Go to menu Explore ...
+

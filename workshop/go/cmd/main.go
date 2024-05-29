@@ -12,10 +12,17 @@ import (
 
 	"demo"
 
+	"github.com/go-logr/stdr"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.opentelemetry.io/otel"
 )
 
 func main() {
+
+	// Default logging to stdout + OpenTelemetry
+	logger := stdr.New(log.New(os.Stdout, "", log.LstdFlags|log.Lshortfile))
+	otel.SetLogger(logger)
+
 	if err := run(); err != nil {
 		log.Fatalln(err)
 	}
