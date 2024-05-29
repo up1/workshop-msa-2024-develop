@@ -34,3 +34,7 @@ Access to grafana
   * user=admin
   * password=admin
 
+## 3. Working with Kafka
+* Producer = Go
+* Consumer = Java + Spring Boot 3
+
