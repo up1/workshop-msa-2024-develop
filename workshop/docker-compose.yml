@@ -1,0 +1,16 @@
+services:
+  go:
+    build: ./go
+    ports:
+      - "9000:9000"
+    environment:
+      OTEL_RESOURCE_ATTRIBUTES: service.name=go-service,service.instance.id=localhost:9000
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://collector:4318
+      OTEL_METRIC_EXPORT_INTERVAL: "5000"  # so we don't have to wait 60s for metrics
+
+  collector:
+    image: grafana/otel-lgtm:0.6.0
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "3000:3000"
