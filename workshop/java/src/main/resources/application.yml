@@ -16,27 +16,27 @@ management:
     web:
       exposure:
         include: "health,metrics,prometheus"
-  otlp:
-    metrics:
-      endpoint: http://collector:4318/v1/metrics
-      export:
-        step: 3s
-    logs:
-      endpoint: http://collector:4318/v1/logs
-      export:
-        step: 3s
-    traces:
-      endpoint: http://collector:4318/v1/traces
-      export:
-        step: 3s
+#  otlp:
+#    metrics:
+#      endpoint: http://collector:4318/v1/metrics
+#      export:
+#        step: 3s
+#    logs:
+#      endpoint: http://collector:4318/v1/logs
+#      export:
+#        step: 3s
+#    traces:
+#      endpoint: http://collector:4318/v1/traces
+#      export:
+#        step: 3s
 logging:
   level:
     com.example.demo: debug
 
-otel:
-  metrics:
-    exporter: none
-  logs:
-    exporter: none
-  traces:
-    exporter: otlp
+#otel:
+#  metrics:
+#    exporter: none
+#  logs:
+#    exporter: none
+#  traces:
+#    exporter: otlp

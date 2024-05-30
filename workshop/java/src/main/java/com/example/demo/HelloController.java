@@ -1,7 +1,6 @@
 package com.example.demo;
 
-import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.api.metrics.Meter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ public class HelloController {
     private final Logger logger = LoggerFactory.getLogger(HelloController.class);
 
     @Autowired
-    private OpenTelemetry openTelemetry;
+    private MeterRegistry meterRegistry;
 
     @Autowired
     HelloService helloService;
@@ -28,8 +27,7 @@ public class HelloController {
         logger.debug("Hello with: {}", name);
 
         // Metric
-        Meter meter = openTelemetry.getMeter("demo");
-        meter.counterBuilder("say_hi").setDescription("Count called data").build();
+        meterRegistry.counter("say_hi").increment();
 
         // Trace
         // Create new span
