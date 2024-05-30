@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/IBM/sarama"
+	"github.com/dnwe/otelsarama"
 )
 
 func NewProducer(brokerList []string, version sarama.KafkaVersion) sarama.SyncProducer {
@@ -18,7 +19,7 @@ func NewProducer(brokerList []string, version sarama.KafkaVersion) sarama.SyncPr
 	config.Net.TLS.Enable = false
 
 	// Use OpenTelemetry instrumentation.
-	config.Producer.Interceptors = []sarama.ProducerInterceptor{NewOTelInterceptor(brokerList)}
+	// config.Producer.Interceptors = []sarama.ProducerInterceptor{NewOTelInterceptor(brokerList)}
 
 	// On the broker side, you may want to change the following settings to get
 	// stronger consistency guarantees:
@@ -29,6 +30,9 @@ func NewProducer(brokerList []string, version sarama.KafkaVersion) sarama.SyncPr
 	if err != nil {
 		log.Fatalln("Failed to start Sarama producer:", err)
 	}
+
+	// Wrap instrumentation
+	producer = otelsarama.WrapSyncProducer(config, producer)
 
 	return producer
 }

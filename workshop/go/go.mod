@@ -4,6 +4,7 @@ go 1.22.3
 
 require (
 	github.com/IBM/sarama v1.43.2
+	github.com/dnwe/otelsarama v0.0.0-20240308230250-9388d9d40bc0
 	github.com/go-logr/stdr v1.2.2
 	go.opentelemetry.io/contrib/bridges/otelslog v0.2.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.52.0

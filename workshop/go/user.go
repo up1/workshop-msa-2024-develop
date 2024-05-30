@@ -9,6 +9,8 @@ import (
 	"net/http"
 
 	"github.com/IBM/sarama"
+	"github.com/dnwe/otelsarama"
+	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/metric"
 )
 
@@ -18,7 +20,7 @@ func NewUser(producer sarama.SyncProducer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 
-		// Trace
+		// Create a new span from cuurent context
 		_, span1 := tracer.Start(r.Context(), "Call NewUser")
 		defer span1.End()
 
@@ -33,14 +35,21 @@ func NewUser(producer sarama.SyncProducer) http.HandlerFunc {
 		logger.Info("Publish data to kafka", slog.Attr{Key: "traceid", Value: slog.StringValue(span1.SpanContext().TraceID().String())})
 
 		// Create new span from the parent span
-		_, span2 := span1.TracerProvider().Tracer("interceptors").Start(r.Context(), "Send message to kafka")
+		ctx, span2 := span1.TracerProvider().Tracer("interceptors").Start(r.Context(), "Send message to kafka")
 		defer span2.End()
 
+		// Create message
 		id := 1 + rand.Intn(100)
-		partition, offset, err := producer.SendMessage(&sarama.ProducerMessage{
+		msg := sarama.ProducerMessage{
 			Topic: "newuser",
-			Value: sarama.StringEncoder(fmt.Sprintf("New User with id=%d", id)),
-		})
+			Key:   sarama.StringEncoder(fmt.Sprintf("New User with id=%d", id)),
+			Value: sarama.StringEncoder(fmt.Sprintf("%d", id)),
+		}
+		// Inject the span context into the message
+		otel.GetTextMapPropagator().Inject(ctx, otelsarama.NewProducerMessageCarrier(&msg))
+
+		// Send message
+		partition, offset, err := producer.SendMessage(&msg)
 		if err != nil {
 			log.Panicf("Error from consumer: %v", err)
 		} else {
