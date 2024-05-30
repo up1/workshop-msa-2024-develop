@@ -43,6 +43,7 @@ Access to grafana
 * [OpenTelemetry auto-instrumentation and instrumentation libraries for Java](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
   * version = 2.4.0
   * [Broker metric](https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/instrumentation/jmx-metrics/javaagent/kafka-broker.md)
+  * [Kafka metrics](https://github.com/open-telemetry/opentelemetry-java-contrib/blob/main/jmx-metrics/README.md)
 
 Start Kafka
 ```

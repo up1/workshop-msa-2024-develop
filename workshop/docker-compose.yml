@@ -32,8 +32,8 @@ services:
     depends_on:
       collector:
         condition: service_healthy
-      kafka:
-        condition: service_healthy
+      # kafka:
+      #   condition: service_healthy
 
   collector:
     image: grafana/otel-lgtm:0.6.0
