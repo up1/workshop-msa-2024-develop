@@ -23,7 +23,7 @@ $docker compose logs --follow
 
 Start LGTM stack
 ```
-$docker compose up -d lgtm
+$docker compose up -d collector
 $docker compose ps
 NAME              IMAGE                     COMMAND                  SERVICE   CREATED          STATUS          PORTS
 workshop-lgtm-1   grafana/otel-lgtm:0.6.0   "/bin/sh -c ./run-al…"   lgtm      37 seconds ago   Up 36 seconds   0.0.0.0:3000->3000/tcp, 0.0.0.0:4317-4318->4317-4318/tcp
