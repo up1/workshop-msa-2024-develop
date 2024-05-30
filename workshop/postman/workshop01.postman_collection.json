@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "ce2dbff5-40e2-418b-a79f-c3ecc4475f3b",
+		"name": "workshop01",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1453931",
+		"_collection_link": "https://red-firefly-245852.postman.co/workspace/kbtg-msa~f3b59e91-d3a0-4f65-9074-d3c6b1688e40/collection/1453931-ce2dbff5-40e2-418b-a79f-c3ecc4475f3b?action=share&source=collection_link&creator=1453931"
+	},
+	"item": [
+		{
+			"name": "go-hello",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response body is a valid integer\", function () {",
+							"  pm.expect(pm.response.text()).to.match(/^\\d+$/);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/hello",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"hello"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "go-kafka",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response body is a valid integer\", function () {",
+							"  pm.expect(pm.response.text()).to.match(/^\\d+$/);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/kafka",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"kafka"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "java-hello",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response body is a valid integer\", function () {",
+							"  pm.expect(pm.response.text()).to.match(/^\\d+$/);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/somkiat",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"somkiat"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
