@@ -79,7 +79,7 @@ Access to Kafka Admin
 Build jar file
 ```
 $cd java
-$mvnw clean package
+$mvnw clean package -DskipTests
 $cd ..
 ```
 
