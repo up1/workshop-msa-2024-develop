@@ -11,7 +11,8 @@ import (
 )
 
 type OTelInterceptor struct {
-	tracer     trace.Tracer
+	// tracer     trace.Tracer
+	span       trace.Span
 	fixedAttrs []attribute.KeyValue
 }
 
@@ -20,7 +21,11 @@ type OTelInterceptor struct {
 func NewOTelInterceptor(brokers []string) *OTelInterceptor {
 	oi := OTelInterceptor{}
 	// oi.tracer = sdktrace.NewTracerProvider().Tracer("interceptors")
-	oi.tracer = tracer
+	// Get current span from the context
+	spanContext := trace.NewSpanContext(trace.SpanContextConfig{TraceID: trace.TraceID{}, SpanID: trace.SpanID{}})
+	// convert spanContext to context
+	context := trace.ContextWithSpanContext(context.Background(), spanContext)
+	_, oi.span = tracer.Start(context, "interceptors")
 
 	// These are based on the spec, which was reachable as of 2020-05-15
 	// https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/messaging.md
@@ -64,7 +69,7 @@ func (oi *OTelInterceptor) OnSend(msg *sarama.ProducerMessage) {
 		return
 	}
 
-	_, span := oi.tracer.Start(context.TODO(), msg.Topic)
+	_, span := oi.span.TracerProvider().Tracer("interceptors").Start(context.Background(), "OnSend")
 	defer span.End()
 	spanContext := span.SpanContext()
 	attWithTopic := append(
