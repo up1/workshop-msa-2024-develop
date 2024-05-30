@@ -5,6 +5,7 @@
 
 
 ## 1. Build and run go service (port=9000)
+* [OpenTelemetry Instrumentation for the Sarama](https://github.com/dnwe/otelsarama)
 ```
 $docker compose build go
 $docker compose up -d go
