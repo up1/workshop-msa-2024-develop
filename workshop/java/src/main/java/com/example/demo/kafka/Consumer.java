@@ -15,7 +15,7 @@ public class Consumer {
     public void listen(ConsumerRecord<String, String> data) {
         System.out.println("========== Header =============");
         for (Header header : data.headers()) {
-            System.out.println(header.key() + " : " + Arrays.toString(header.value()));
+            System.out.println(header.key() + " : " + new String(header.value()));
         }
         System.out.println("========== Body =============");
         System.out.println("Received message: " + data.value());
