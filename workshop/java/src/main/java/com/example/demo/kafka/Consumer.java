@@ -6,8 +6,6 @@ import org.apache.kafka.common.header.Header;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
 @Component
 public class Consumer {
     @KafkaListener(topics = "newuser", groupId = "group01")
